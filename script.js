@@ -21,6 +21,40 @@ req.onload = () => {
   drawChart(json);
 };
 
+const onMouseMove = (event) => {
+  const tooltip = d3.select("#tooltip");
+  const h3 = d3.select("h3");
+  const p = d3.select("p");
+
+  //Data needed for tooltip
+  const doping = event.target.__data__.Doping;
+  const name = event.target.__data__.Name;
+  const nationality = event.target.__data__.Nationality;
+  const place = event.target.__data__.Place;
+  const time = event.target.__data__.Time;
+  const year = event.target.__data__.Year;
+
+  tooltip
+    .style("top", `${event.clientY - 30}px`)
+    .style("left", `${event.clientX + 20}px`)
+    .style("opacity", "0.9")
+    .attr("data-year", `${year}`);
+
+  h3.html(`${name}`);
+  p.html(
+    `Nationality: ${nationality} <br> Year: ${year} <br> Time: ${time} <br> Place: ${place} <br> Allegations: ${
+      doping === "" ? "No Allegations" : doping
+    }`
+  );
+  console.log(event);
+};
+
+const onMouseOut = () => {
+  const tooltip = d3.select("#tooltip");
+
+  tooltip.style("opacity", "0");
+};
+
 function drawChart(dataset) {
   const newDataset = dataset.map((elem) => {
     const time = elem.Time.split(":"); //split time string
@@ -88,6 +122,8 @@ function drawChart(dataset) {
     .data(newDataset)
     .enter()
     .append("circle")
+    .on("mouseover", onMouseMove)
+    .on("mouseout", onMouseOut)
     .attr("cx", (d) => xScale(d.Year))
     .attr("cy", (d) => yScale(d.newTime))
     .attr("r", 5)
@@ -95,11 +131,11 @@ function drawChart(dataset) {
     .attr("data-xvalue", (d) => d.Year)
     .attr("data-yvalue", (d) => d.newTime)
     .style("fill", (d) => {
-        if(d.Doping !== "") {
-            return "red"
-        }
-        return "navy"
-    })
+      if (d.Doping !== "") {
+        return "red";
+      }
+      return "navy";
+    });
 
-  console.log(newDataset, yMin);
+  console.log(newDataset);
 }

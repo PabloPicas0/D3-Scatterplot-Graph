@@ -11,3 +11,24 @@ body {
   height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.dot {
+    opacity: 0.8;
+}
+
+#tooltip {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    background-color: black;
+    color: whitesmoke;
+    padding: 15px;
+    border-radius: 10px;
+    transition: opacity 250ms ease-out;
+}
+
+h3 {
+    text-align: center;
+    border-bottom: 1px solid whitesmoke;
+    margin-bottom: 1rem;
+}
