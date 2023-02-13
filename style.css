@@ -10,6 +10,7 @@ body {
   align-items: center;
   height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(255, 253, 250);
 }
 
 .dot {
@@ -31,4 +32,19 @@ h3 {
     text-align: center;
     border-bottom: 1px solid whitesmoke;
     margin-bottom: 1rem;
+}
+
+#title {
+  font-size: 1.5rem;
+  fill: rgb(110, 99, 85);
+}
+
+#sub-title{
+  font-size: 1.3rem;
+  fill: rgb(110, 99, 85);
+}
+
+#yLabel {
+  fill:rgb(110, 99, 85);
+  font-size: 1.2rem;
 }

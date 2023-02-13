@@ -12,8 +12,8 @@ const innerheight = 480;
 
 const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
-const req = new XMLHttpRequest();
 const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
+const req = new XMLHttpRequest();
 req.open("GET", url, true);
 req.send();
 req.onload = () => {
@@ -46,7 +46,6 @@ const onMouseMove = (event) => {
       doping === "" ? "No Allegations" : doping
     }`
   );
-  console.log(event);
 };
 
 const onMouseOut = () => {
@@ -97,11 +96,27 @@ function drawChart(dataset) {
   const content = d3
     .select("svg")
     .append("g")
-    .attr("transform", `translate(${padding / 2}, 0)`);
+    .attr("transform", `translate(${padding / 2}, ${padding / 2})`);
+
+  //main conatiner for legend
+  const legend = svg
+    .append("g")
+    .attr("transform", `translate(${w - padding}, 210)`)
+    .attr("id", "legend");
+
+  //legend for no doping
+  const noDoping = legend.append("g");
+  noDoping.append("circle").attr("r", 10).attr("fill", "navy");
+  noDoping.append("text").attr("x", -218).attr("y", 5).text("No doping allegations").style("font-size", "1.3rem").style("fill", "rgb(75, 67, 58)");
+
+  //legend for doping
+  const doping = legend.append("g").attr("transform", "translate(0, 40)");
+  doping.append("circle").attr("r", 10).attr("fill", "red");
+  doping.append("text").attr("x", -233).attr("y", 5).text("With doping allegations").style("font-size", "1.3rem").style("fill", "rgb(75, 67, 58)");
 
   //Title
-  content.append("text").attr("x", 0).attr("y", 20).attr("id", "title").text("Doping in Professional Bicycle Racing");
-  content.append("text").attr("x", 0).attr("y", 40).text("35 Fastest times up Alpe d'Huez");
+  content.append("text").attr("x", 60).attr("y", 10).attr("id", "title").text("Doping in Professional Bicycle Racing");
+  content.append("text").attr("x", 60).attr("y", 40).attr("id", "sub-title").text("35 Fastest times up Alpe d'Huez");
 
   //x and y Axis
   content
@@ -110,12 +125,14 @@ function drawChart(dataset) {
     .attr("transform", `translate(0, ${h - padding})`)
     .call(xAxis);
 
-  content
+  const yAxisElement = content
     .append("g")
     .attr("id", "y-axis")
     .attr("transform", `translate(${padding}, 0)`)
     .call(yAxis)
     .call((g) => g.selectAll(".tick text").attr("x", -10));
+
+  yAxisElement.append("text").attr("y", -50).attr("x", -242).attr("transform", `rotate(-90)`).attr("id", "yLabel").text("Time in minutes");
 
   content
     .selectAll("circle")
@@ -126,7 +143,7 @@ function drawChart(dataset) {
     .on("mouseout", onMouseOut)
     .attr("cx", (d) => xScale(d.Year))
     .attr("cy", (d) => yScale(d.newTime))
-    .attr("r", 5)
+    .attr("r", 10)
     .attr("class", "dot")
     .attr("data-xvalue", (d) => d.Year)
     .attr("data-yvalue", (d) => d.newTime)
@@ -136,6 +153,4 @@ function drawChart(dataset) {
       }
       return "navy";
     });
-
-  console.log(newDataset);
 }
